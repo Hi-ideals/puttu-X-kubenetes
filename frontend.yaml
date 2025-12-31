@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend 
+    spec:
+      containers:
+        - name: frontend-container
+          image: my-frontend-image:latest
+          ports:
+            - containerPort: 8080 
+          env:
+            - name: DB_HOST
+              value: "db-service"
+            - name: DB_PORT
+              value: "3306" 
+            - name: DB_NAME
+              value: "db_stateputturjob"
+            - name: DB_USER
+              value: "stateputturjob" 
+            - name: DB_PASSWORD
+              value: "StateputturJob@HitpL2025"
+          volumeMounts:
+            - name: images-volume
+              mountPath: /opt/prodputturVet/images
+      volumes:
+        - name: images-volume
+          hostPath:
+          - path: /opt/prodputturVet/images
+            type: Directory 
+            
+
+
+          
