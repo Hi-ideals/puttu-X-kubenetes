@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
@@ -10,22 +10,22 @@ spec:
   template:
     metadata:
       labels:
-        app: frontend 
+        app: frontend
     spec:
       containers:
         - name: frontend-container
           image: my-frontend-image:latest
           ports:
-            - containerPort: 8080 
+            - containerPort: 8080
           env:
             - name: DB_HOST
               value: "db-service"
             - name: DB_PORT
-              value: "3306" 
+              value: "3306"
             - name: DB_NAME
               value: "db_stateputturjob"
             - name: DB_USER
-              value: "stateputturjob" 
+              value: "stateputturjob"
             - name: DB_PASSWORD
               value: "StateputturJob@HitpL2025"
           volumeMounts:
@@ -34,9 +34,5 @@ spec:
       volumes:
         - name: images-volume
           hostPath:
-          - path: /opt/prodputturVet/images
-            type: Directory 
-            
-
-
-          
+            path: /opt/prodputturVet/images
+            type: DirectoryOrCreate

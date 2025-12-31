@@ -1,22 +1,22 @@
-apiVersion: v1
-kind: deployment
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: database-deployment 
+  name: database-deployment
 spec:
-  replicas: 1 
+  replicas: 1
   selector:
     matchLabels:
-      app: database 
+      app: database
   template:
     metadata:
       labels:
         app: database
     spec:
       containers:
-        - name: database-container
+        - name: mysql
           image: mysql:5.6
           ports:
-            - containerPort: 3306 
+            - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "mysql123"
@@ -28,32 +28,23 @@ spec:
               value: "StateputturJob@HitpL2025"
           volumeMounts:
             - name: initdb-volume
-              mountPath: /docker-entrypoint-initdb.d/db_stateputturjob.sql
-              subPath: db_stateputturjob.sql
+              mountPath: /docker-entrypoint-initdb.d
             - name: mysql-data-volume
               mountPath: /var/lib/mysql
-            - name: mysql-conf-volume
-              mountPath: /etc/mysql/conf.d
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysql -u root -pmysql123 -e "SELECT 1"
+            initialDelaySeconds: 40
+            periodSeconds: 10
       volumes:
         - name: initdb-volume
-          hostPath: 
-          - path: ./db_stateputturjob.sql
-            type: File  
+          hostPath:
+            path: /root/puttu-X-kubenetes/kubernetes/db_stateputturjob.sql
+            type: File
         - name: mysql-data-volume
           hostPath:
-          - path: ./mysql/data
-            type: Directory
-        - name: mysql-conf-volume
-          hostPath:
-          - path: ./mysql/conf.d
-            type: Directory
-      healthChecks:
-        - name: database-healthcheck
-          exec:
-            command:
-              - "sh"
-              - "-c"
-              - "mysql -u root -pmysql123 -e 'SELECT 1'"
-          initialDelaySeconds: 40
-          periodSeconds: 10
-          failureThreshold: 10
+            path: /root/puttu-X-kubenetes/kubernetes/mysql/data
+            type: DirectoryOrCreate
