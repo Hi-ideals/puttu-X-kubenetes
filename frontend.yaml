@@ -14,12 +14,13 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: my-frontend-image:latest
+          image: jaicswamy962/my-frontend-image:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
             - name: DB_HOST
-              value: "db-service"
+              value: "db"
             - name: DB_PORT
               value: "3306"
             - name: DB_NAME

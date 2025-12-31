@@ -27,24 +27,10 @@ spec:
             - name: MYSQL_PASSWORD
               value: "StateputturJob@HitpL2025"
           volumeMounts:
-            - name: initdb-volume
-              mountPath: /docker-entrypoint-initdb.d
             - name: mysql-data-volume
               mountPath: /var/lib/mysql
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - mysql -u root -pmysql123 -e "SELECT 1"
-            initialDelaySeconds: 40
-            periodSeconds: 10
       volumes:
-        - name: initdb-volume
-          hostPath:
-            path: /root/puttu-X-kubenetes/kubernetes/db_stateputturjob.sql
-            type: File
         - name: mysql-data-volume
           hostPath:
-            path: /root/puttu-X-kubenetes/kubernetes/mysql/data
+            path: /root/mysql/data
             type: DirectoryOrCreate
